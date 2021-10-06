@@ -1,6 +1,7 @@
 
 
 const Config = {
+    SENDFILE:"SENDFILE",
     HEARDER:"HEARDER",
     FILECLEAR:"FILECLEAR",
     FILEUPLOAD:"FILEUPLOAD",

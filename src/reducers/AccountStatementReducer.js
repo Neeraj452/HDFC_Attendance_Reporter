@@ -13,7 +13,8 @@ const INITIAL_STATE = {
     EmployeeData:[],
     FileData:[],
     hearder:"",
-    dataBaseData:[]
+    dataBaseData:[],
+    fileContent:""
 }
 
 
@@ -58,11 +59,15 @@ export function accountStatementReducer (state = INITIAL_STATE, action) {
                 state.FileData = state.FileData.filter((Element)=>
                 (Element.id !==action.data)
                 )
-                localStorage.setItem("FileData",JSON.stringify(state.FileData))
                 return {...state}
  
             case Config.HEARDER:
                 state.hearder=action.data
+                return{...state}
+
+            case Config.SENDFILE:
+                state.fileContent=action.data
+                console.log("fileContent",state.fileContent)
                 return{...state}
 
 

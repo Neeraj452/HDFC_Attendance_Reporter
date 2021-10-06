@@ -2,8 +2,7 @@ import React, {useState, useEffect,useCallback} from 'react'
 import { useSelector, useDispatch} from 'react-redux';
 import Dexie from "dexie";
 import { Button, Modal } from 'react-bootstrap';
-
-import {fileUpload,fileClear,headerShow} from '../actions/AccountStatementAction'
+import {fileUpload,fileClear,headerShow,sendFile} from '../actions/AccountStatementAction'
 import Dropzone from './Dropzone';
 function UploadRecord() {
       const [item, setitem] = useState("")
@@ -48,16 +47,23 @@ function UploadRecord() {
               dispatch(headerShow(false)) 
         
        },[]) 
-      
-      const handalFile=(files)=>{
-            const reader = new FileReader()
-            reader.onload=()=>{
-                  setFile(reader.result);
-            }
-            reader.readAsDataURL(files[0])
+       var file2=null;
+      const handalFile =(files)=>{
+            const promise = new Promise((resolve) => {
+                  const reader = new FileReader();
+                  reader.onload = function () {
+                    resolve(reader.result);
+                  }
+                  reader.readAsDataURL(files[0]);
+                });
+
+                promise.then(files => {
+                   file2 = files;
+                 
+                });
             const monthNames = ["Jan", "Feb", "Mar", "April", "May", "June",
-            "July", "Aug", "Sep", "Oct", "Nov", "Dec"
-            ];
+            "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
             const d= new Date();
             const hour = d.getHours()
             const suffix = hour >= 12 ? "PM":"AM";
@@ -78,9 +84,10 @@ function UploadRecord() {
 
             const time = h + ":"+ m +" "+suffix
             const date =(monthNames[d.getMonth()] +" " + d.getDate() +" " +d.getFullYear() + " "+ time)  
-            console.log("postFile",postFile)
+           
+           setTimeout(function(){   
             let object ={
-                  file:postFile,
+                  file:file2,
                   filename:files[0].name,
                   date:date
             }
@@ -89,7 +96,7 @@ function UploadRecord() {
                   let allPosts = await db.posts1.toArray();
                   dispatch(fileUpload(allPosts))
               });
-            
+           },1000)
             
            
           

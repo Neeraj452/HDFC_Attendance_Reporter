@@ -36,6 +36,11 @@ export const headerShow = (res) => ({
     data:res
 });
 
+export const sendFile = (res) => ({
+    type: Config.SENDFILE,
+    data:res
+});
+
 
 
 
