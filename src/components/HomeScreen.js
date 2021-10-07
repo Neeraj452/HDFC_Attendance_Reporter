@@ -53,7 +53,11 @@ import { NavLink} from 'react-router-dom';
              <Fragment>
                  <nav className="navbar navbar-expand-sm mt-2">
                      <div className="container">
-                         <a href="https://rjs.in" target="_blank" className="navbar-brand text-dark"><img src={RJSlogo} alt="RJS" width="25" className="mr-2" />Attendance Reporter </a>
+                         <ul className="float-start" >
+                        <a href="https://rjs.in" target="_blank" className=" text-dark d-inline"><img src={RJSlogo} alt="RJS" width="25" className="mr-2" /></a>
+                        
+                         <NavLink className="text-dark text-decoration-none d-inline" to="/">Attendance Reporter </NavLink>
+                         </ul>
                          <button className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                              <div className="icon mt-1"></div>
                              <div className="icon my-1"></div>

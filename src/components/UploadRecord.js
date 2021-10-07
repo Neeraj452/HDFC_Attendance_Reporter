@@ -4,18 +4,20 @@ import Dexie from "dexie";
 import { Button, Modal } from 'react-bootstrap';
 import {fileUpload,fileClear,headerShow,sendFile} from '../actions/AccountStatementAction'
 import Dropzone from './Dropzone';
+import PromisifyFileReader from 'promisify-file-reader';
 function UploadRecord() {
-      const [item, setitem] = useState("")
       const [show, setShow]= useState(false) 
       const [id, setId] = useState("")
-      const [postFile, setFile] = useState("");
       const dispatch = useDispatch()
       const myState = useSelector((store)=> store.accountStatementReducer)
       console.log("myState",myState.FileData)
       const db = new Dexie("ReactDexie");
       db.version(1).stores({
-          posts1: "++id, file,filename, date"
+          posts1: "++id,id1, No,Mchn, EnNo, Name, Mode, IOMd, DateTime"
       })
+      db.version(1).stores({
+            posts: "++id,id2,filename,date"
+        })
       db.open().catch((err) => {
           console.log(err.stack || err)
       })
@@ -23,11 +25,8 @@ function UploadRecord() {
      
       const onDrop = useCallback(acceptedFiles => {
             console.log("acceptedFiles",acceptedFiles)
-            handalFile(acceptedFiles);
+            handalFile(acceptedFiles[0]);
           });
-     
-          
-      
       
           myState.FileData.sort((a, b) =>{
           let da =(new Date(a.date)).getTime()/1000.0,
@@ -36,7 +35,7 @@ function UploadRecord() {
            });
 
       const getPosts = async() => {
-            var allPosts = await db.posts1.toArray();
+            var allPosts = await db.posts.toArray();
             console.log("allPosts",allPosts)
             dispatch(fileUpload(allPosts))
            
@@ -47,20 +46,40 @@ function UploadRecord() {
               dispatch(headerShow(false)) 
         
        },[]) 
-       var file2=null;
-      const handalFile =(files)=>{
-            const promise = new Promise((resolve) => {
-                  const reader = new FileReader();
-                  reader.onload = function () {
-                    resolve(reader.result);
-                  }
-                  reader.readAsDataURL(files[0]);
-                });
+     
+       const saveLineToStorageUtils= async(line)=>{
+            
+            if (!line || !line.trim()) return;
+            let lineParts = line.split("\t").map(linePart => linePart.trim());
+            console.log("lineParts",lineParts)
+            let objectToStore = {
+                  id1:random,
+                  No:lineParts[0],
+                  Mchn:lineParts[1],
+                  EnNo:lineParts[2],
+                  Name:lineParts[3], 
+                  Mode:lineParts[4],
+                  IOMd:lineParts[5],
+                  DateTime:lineParts[6],
+            }
+             db.posts1.add(objectToStore);
+       }
+       var random=Math.random()
+      const handalFile =async(FileObjects)=>{
+            
+            console.log(FileObjects)
 
-                promise.then(files => {
-                   file2 = files;
-                 
-                });
+            console.log("FileObjectsname",FileObjects.name);
+            let lines = ( await PromisifyFileReader.readAsText(FileObjects)).split("\n");
+             console.log("line", lines)
+            
+             for (let i = 1; i < lines.length; i++) {
+                  let line = lines[i];
+                  saveLineToStorageUtils(line);
+              }
+
+            
+      
             const monthNames = ["Jan", "Feb", "Mar", "April", "May", "June",
             "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -84,23 +103,23 @@ function UploadRecord() {
 
             const time = h + ":"+ m +" "+suffix
             const date =(monthNames[d.getMonth()] +" " + d.getDate() +" " +d.getFullYear() + " "+ time)  
-           
-           setTimeout(function(){   
             let object ={
-                  file:file2,
-                  filename:files[0].name,
+                  id2:random,
+                  filename:FileObjects.name,
                   date:date
             }
 
-            db.posts1.add(object).then(async() => {
-                  let allPosts = await db.posts1.toArray();
+            db.posts.add(object).then(async() => {
+                  let allPosts = await db.posts.toArray();
                   dispatch(fileUpload(allPosts))
               });
-           },1000)
+      
             
-           
-          
+         
       }
+
+      
+
       const modalShow=(id)=>{
             setId(id)
             setShow(true)
@@ -108,18 +127,36 @@ function UploadRecord() {
 
       }
 
-       const dataClear= (id)=>{
-            db.posts1.delete(id)
-            dispatch(fileClear(id))
+       const dataClear= (id2)=>{
+            db.posts1.delete(id2)
+            db.posts.delete(id2)
+            dispatch(fileClear(id2))
             setShow(false)
        }
 
        
-      const Download =()=>{
-            myState.FileData.map((Element)=>{
-            const {file}=Element
-            return setitem(file)
-      })
+      const Download =async(id2)=>{
+            let text=[]
+              let  allDataFile1=await db.posts1.toArray()
+              let finaldata=allDataFile1.filter((Element)=>{
+                    return Element.id1===id2
+              })
+              await finaldata.map((Element,index)=>{
+                    const{No,Mchn, EnNo, Name, Mode, IOMd, DateTime}=Element
+                    text[0]= "No"+"     "+"Mchn" +"     " + "EnNo"+"        "  +" Name"+"    "  + "Mode"+"    " +" IOMd"+"    " +"DateTime"
+                    text[index+1]= No +" "+ Mchn +"      "+  EnNo +"     "+  Name +"    "+  Mode +"          "+  IOMd +"   "+  DateTime;
+              })
+              text = text.join("\n")
+              console.log("finaldata", text)
+              setTimeout(await function(){
+              const element = document.createElement("a");
+              const file = new Blob([text], {type: 'text/plain'});
+              element.href = URL.createObjectURL(file);
+              element.download = "filename";
+              document.body.appendChild(element);
+              element.click();
+              },1000)
+              return 
       
 }
 
@@ -149,12 +186,12 @@ function UploadRecord() {
                         <tbody>
                         {   
                              myState.FileData &&(myState.FileData).map((Element,index)=>{
-                                       const {id,filename,date} = Element
+                                       const {id,id2,filename,date} = Element
                                        return (
                                              <tr><td className="col-sm-2 py-4">{index+1}</td>
                                              <td className="col-sm-3 py-4" >{filename}</td>
                                              <td className=" col-sm-3 py-4">{date}</td>
-                                             <td className="pt-3"><a href={item} download={filename} onClick={Download}><button type="button" className=" btn btn-primary mr-1">Download</button></a> 
+                                             <td className="pt-3"><button type="button" onClick={()=>Download(id2)} className=" btn btn-primary mr-1">Download</button> 
                                              <button type="button" onClick={()=>modalShow(id)} className=" btn btn-danger col-sm-4  ">Remove</button>
                                           </td> 
                                              </tr>
@@ -173,16 +210,19 @@ function UploadRecord() {
                   <span aria-hidden="true">&times;</span>
                             </button>
       </Modal.Header>
-       <Modal.Body>Are you sure want to remove this record </Modal.Body>
+       <Modal.Body>Are you sure want to remove this record? </Modal.Body>
 
        <Modal.Footer>
-             <Button onClick={()=>dataClear(id)}>Yes</Button>
+             <Button onClick={()=>dataClear(id)} style={{width: "80px"}}>Yes</Button>
             
        </Modal.Footer>
      </Modal>}
     </div>
 
       )
+     
 }
 
 export default UploadRecord;
+
+

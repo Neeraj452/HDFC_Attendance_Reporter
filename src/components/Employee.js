@@ -1,11 +1,11 @@
 import React, {useState,useEffect} from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import Dexie from "dexie";
+import Dexie from 'dexie';
+
 import { useSelector, useDispatch } from 'react-redux';
 import {addList, employeeUpdate,dataDelete,headerShow} from '../actions/AccountStatementAction'
 
 function Employee() {
-    
       const [username, setUsername] = useState("");
       const [full_name, setFull_name] = useState("");
       const [company, setCompany] = useState("");
@@ -16,12 +16,11 @@ function Employee() {
       const myState = useSelector((store)=> store.accountStatementReducer);
       
       const db = new Dexie("DexieEmployee");
+     
       db.version(1).stores({
           Employee:'++id,username,full_name,company'
       })
-      db.open().catch((err) => {
-          console.log(err.stack || err)
-      })
+     
       
       const getData1 = async() => {
             var allPosts = await db.Employee.toArray();
@@ -40,6 +39,7 @@ function Employee() {
       const handleSubmit= (e)=>{
             e.preventDefault();
             var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+            
             if(format.test(username) || format.test(full_name) || format.test(company))
             {
                   setShowSpecial(true)
@@ -114,9 +114,7 @@ function Employee() {
       const dataDelete1=(id)=>{
             db.Employee.delete(id)
             dispatch(dataDelete(id))
-            setShow(false)
-
-            
+            setShow(false)    
       }
       
       return (
@@ -183,10 +181,10 @@ function Employee() {
                                 <span aria-hidden="true">&times;</span>
                             </button>
        </Modal.Header>
-       <Modal.Body>Are you sure want to remove this employee</Modal.Body>
+       <Modal.Body>Are you sure want to remove this employee? </Modal.Body>
 
        <Modal.Footer>
-             <Button onClick={()=>dataDelete1(id)}>Yes</Button>
+             <Button onClick={()=>dataDelete1(id)} style={{width: "80px"}}>Yes</Button>
            
        </Modal.Footer>
      </Modal>}
