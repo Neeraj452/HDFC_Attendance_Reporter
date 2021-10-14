@@ -27,10 +27,8 @@ function UploadRecord() {
             if (!line || !line.trim()) return;
             let lineParts = line.split("\t").map(linePart => linePart.trim());
             console.log("lineParts", lineParts)
-
-            let recordInfo = await AccountNumbersUtils.upload_file_infoDB();
             let objectToStore = {
-                  recordId: recordInfo.length + 1,
+                  recordId: myState.FileData.length > 0 ? myState.FileData[myState.FileData.length - 1].infoId + 1 : 0,
                   No: lineParts[0],
                   Mchn: lineParts[1],
                   EnNo: lineParts[2],
@@ -74,9 +72,8 @@ function UploadRecord() {
 
             const time = h + ":" + m + " " + suffix
             const date = (monthNames[d.getMonth()] + " " + d.getDate() + " " + d.getFullYear() + " " + time)
-            let recordInfo = await AccountNumbersUtils.upload_file_infoDB();
             let object = {
-                  infoId: recordInfo.length + 1,
+                  infoId: myState.FileData.length > 0 ? myState.FileData[myState.FileData.length - 1].infoId + 1 : 0,
                   filename: FileObjects.name,
                   date: date
             }

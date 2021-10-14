@@ -144,11 +144,5 @@ export default class AccountNumbersUtils {
         }, 1000)
     }
 
-    static upload_file_infoDB = () => {
-        return db.upload_file_info.toArray()
-    }
-    static upload_file_detailsDB = async () => {
-        return await db.upload_file_details.toArray()
-    }
 
 }
