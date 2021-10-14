@@ -14,7 +14,8 @@ const INITIAL_STATE = {
     FileData:[],
     hearder:"",
     dataBaseData:[],
-    fileContent:""
+    fileContent:"",
+    showSpecial:false
 }
 
 
@@ -42,7 +43,7 @@ export function accountStatementReducer (state = INITIAL_STATE, action) {
                   employee.username=value; 
                 }
                 else if(type==='fullname'){
-                  employee.full_name=value;
+                  employee.fullname=value;
                 }
                 else{
                     employee.company=value;
@@ -59,6 +60,7 @@ export function accountStatementReducer (state = INITIAL_STATE, action) {
                 state.FileData = state.FileData.filter((Element)=>
                 (Element.id !==action.data)
                 )
+                state.show=true
                 return {...state}
  
             case Config.HEARDER:
@@ -68,6 +70,16 @@ export function accountStatementReducer (state = INITIAL_STATE, action) {
             case Config.SENDFILE:
                 state.fileContent=action.data
                 console.log("fileContent",state.fileContent)
+                return{...state}
+
+            case Config.MODAL:
+                console.log(action.data)
+                state.show = action.data
+                return{...state}
+
+            case Config.SHOWSPECIAL:
+                console.log(action.data)
+                state.showSpecial = action.data
                 return{...state}
 
 

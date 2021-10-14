@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import Config from "../utils/Config";
-import { userDetailsClear, showStateToFalse, convertButtonClick, accDetailsStatus, onAccountsFetched} from '../actions/AccountStatementAction'
+import { userDetailsClear, showStateToFalse, convertButtonClick, accDetailsStatus, onAccountsFetched } from '../actions/AccountStatementAction'
 import { connect } from "react-redux";
 import Dropzone from 'react-dropzone'
 import RJSlogo from '../assets/rjs-logo.png'
@@ -8,29 +8,26 @@ import { bindActionCreators } from "redux";
 import XLSCSVFileTransformer from "../utils/XLSCSVFileTransformer";
 import AccountNumbersUtils from "../utils/AccountNumbersUtils";
 import Utils from "../utils/utils";
-import { NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
- class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
 
-    constructor(){
-    super()
-    this.state ={
-        customerId : "Select",
-        file : []
-    }  
-    
-}
+    constructor() {
+        super()
+        this.state = {
+            customerId: "Select",
+            file: []
+        }
 
+    }
 
-    
-    
     convertHandle = async () => {
         await this.props.convertButtonClick();
         this.textInput.current.click();
     }
-    
+
     handleChange = (event) => {
-        this.setState({customerId : event});
+        this.setState({ customerId: event });
     }
 
     componentDidMount = () => {
@@ -45,44 +42,43 @@ import { NavLink} from 'react-router-dom';
             let btnDisable = document.querySelector("#modalBtn");
             this.state.customerId === "Select" ? btnDisable.disabled = true : btnDisable.disabled = false;
         }
-        
-       
+
+
     }
-     renderHeader = () => {
-         return (
-             <Fragment>
-                 <nav className="navbar navbar-expand-sm mt-2">
-                     <div className="container">
-                         <ul className="float-start" >
-                        <a href="https://rjs.in" target="_blank" className=" text-dark d-inline"><img src={RJSlogo} alt="RJS" width="25" className="mr-2" /></a>
-                        
-                         <NavLink className="text-dark text-decoration-none d-inline" to="/">Attendance Reporter </NavLink>
-                         </ul>
-                         <button className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                             <div className="icon mt-1"></div>
-                             <div className="icon my-1"></div>
-                             <div className="icon my-1"></div>
-                         </button>
-                    
+    renderHeader = () => {
+        return (
+            <Fragment>
+                <nav className="navbar navbar-expand-sm mt-2 ">
+                    <div className="container">
+                        <div className="float-start">
+                            <a href="https://rjs.in" target="_blank" className=" text-dark d-inline"><img src={RJSlogo} alt="RJS" width="25" className="mr-2" /></a>
+                            <NavLink className="text-dark text-decoration-none d-inline " to="/" style={{ fontSize: "20px" }}>Attendance Reporter </NavLink>
+                        </div>
+                        <button className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                            <div className="icon mt-1"></div>
+                            <div className="icon my-1"></div>
+                            <div className="icon my-1"></div>
+                        </button>
+
                         {this.props.accountStatement.hearder ? null :
                             <div>
                                 <div className="navbar-collapse collapse" id="navbarCollapse">
-                             <ul className="navbar-nav nav-pills ml-auto mt-2">
-                                 {/* {this.props.accountStatement.allusers && this.props.accountStatement.allusers.length ? <li className="nav-item"><a onClick={this.convertHandle} className={`nav-link pointer ${this.props.accountStatement.show ? 'active' : ''}`}>Convert</a></li> : ""} */}
-                                 <li className="nav-item dropdown">
-                                     <a className="nav-link dropdown-toggle pointer" data-toggle="dropdown">Menu</a>
+                                    <ul className="navbar-nav nav-pills ml-auto mt-2">
+                                        {/* {this.props.accountStatement.allusers && this.props.accountStatement.allusers.length ? <li className="nav-item"><a onClick={this.convertHandle} className={`nav-link pointer ${this.props.accountStatement.show ? 'active' : ''}`}>Convert</a></li> : ""} */}
+                                        <li className="nav-item dropdown">
+                                            <a className="nav-link dropdown-toggle pointer" data-toggle="dropdown">Menu</a>
 
 
-                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <li> <NavLink className="
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li> <NavLink className="
                                             dropdown-item" to="/Employee">Employee</NavLink></li>
-                                             
-                                            <li> <NavLink className="
+
+                                                <li> <NavLink className="
                                             dropdown-item" to="/UploadRecord">Upload Record</NavLink></li>
-                                            <li> <NavLink className="
+                                                <li> <NavLink className="
                                             dropdown-item" to="/Report">Report</NavLink></li>
-                                      </ul>
-                                     {/* <div className="dropdown-menu">
+                                            </ul>
+                                            {/* <div className="dropdown-menu">
                                          {this.props.accountStatement.allusers && this.props.accountStatement.allusers.length ? <Fragment>
                                              {this.props.accountStatement.show && <a onClick={this.props.showStateToFalse} className="dropdown-item p-0 px-2 pointer mb-1">Select Account Name CSV</a>}
                                              <a onClick={this.downloadFormatOne} className="dropdown-item p-0 px-2 pointer">Net Banking Sample</a>
@@ -90,22 +86,21 @@ import { NavLink} from 'react-router-dom';
                                              <a className="dropdown-item p-0 px-2 pointer" data-toggle="modal" data-target="#clearDataModal">Clear All Data</a>
                                          </Fragment> :
                                           <a onClick={this.downloadFormatThree} className="dropdown-item p-0 px-2 pointer">Download Format Sample</a>}
-
                                      </div> */}
-                                 </li>
-                                 <li><a className="nav-item nav-link pointer" href="mailto:info@rjs.in"  >Contact</a></li>
-                             </ul>
-                         </div>
-                         </div>
-                         }
-                     </div>
-                 </nav>
-                 <div className="container">
-                     <hr />
-                 </div>
-             </Fragment>
-         )
-     }
+                                        </li>
+                                        <li><a className="nav-item nav-link pointer" href="mailto:info@rjs.in"  >Contact</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </nav>
+                <div className="container">
+                    <hr />
+                </div>
+            </Fragment>
+        )
+    }
 
     render = () => (
         <Fragment>
@@ -157,7 +152,7 @@ import { NavLink} from 'react-router-dom';
             {this.renderClearDialogView()}
 
             {this.renderErrorDialogView()}
-            
+
             {this.props.accountStatement.error
                 ?
                 <div className="modal-backdrop fade show" />
@@ -197,7 +192,7 @@ import { NavLink} from 'react-router-dom';
                 </div>
             </div> */}
         </Fragment>
-    ); 
+    );
     renderClearDialogView = () => (
         <Fragment>
             {/* <div className="modal fade" id="clearDataModal" >
@@ -224,7 +219,7 @@ import { NavLink} from 'react-router-dom';
     getAccountsView = () => !this.props.accountStatement.allusers.length ?
         null
         :
-         <div className="container mb-5">
+        <div className="container mb-5">
             {/* <div className="row">
              <div className="col-12 mx-auto text-center"> 
                 <h5 className="mb-3">
@@ -254,19 +249,19 @@ import { NavLink} from 'react-router-dom';
                     </table>
             </div>
         </div> */}
-    </div>
+        </div>
 
     clearAllData = () => {
         this.props.userDetailsClear()
     }
 
-    modalClose = () =>{
-        this.props.accDetailsStatus({type: Config.FILE_TRANSFORM_ERROR_DISMISS});
+    modalClose = () => {
+        this.props.accDetailsStatus({ type: Config.FILE_TRANSFORM_ERROR_DISMISS });
     }
-     
+
     modalFileSelected = () => {
         this.modalClose();
-        this.setState({ customerId: "Select"});
+        this.setState({ customerId: "Select" });
         if (this.state.file[0])
             this.onFileSelected(this.state.file[0], this.state.customerId);
     }
@@ -284,8 +279,8 @@ import { NavLink} from 'react-router-dom';
     };
 
     onFileSelected = (FileObjects, customerId = undefined) => {
-        this.setState({file : FileObjects});
-        if(Utils.isArray(customerId)) customerId = undefined;
+        this.setState({ file: FileObjects });
+        if (Utils.isArray(customerId)) customerId = undefined;
         XLSCSVFileTransformer.transformFile(Utils.isArray(FileObjects) ? FileObjects : [FileObjects], customerId).then(() => null).catch(() => null);
     };
 

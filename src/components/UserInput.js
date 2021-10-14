@@ -7,14 +7,11 @@ import {headerShow} from '../actions/AccountStatementAction'
 const UserInput=()=> {
       const history = useHistory()
       const dispatch=useDispatch()
-
-      const [token, setToken]= useState(null)
-      const [key,setKey]=useState(null)
+      const [token, setToken]= useState("")
+      const [key,setKey]=useState("")
       const [show, setShow]= useState(false) 
-     
-     
       const handleSubmit=()=>{
-        if(token===null && key===null)
+        if(token==="" || key==="")
         {
           setShow(true)
          

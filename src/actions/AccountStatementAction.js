@@ -2,49 +2,54 @@ import Config from "../utils/Config";
 
 export const addList = (res) => ({
     type: Config.ADD,
-    data:res
+    data: res
 });
 
 export const dataDelete = (res) => ({
     type: Config.DELETE,
-    data:res
+    data: res
 });
 
 
 export const employeeUpdate = (res) => ({
     type: Config.EMPLOYEE_UPDATE,
-    data:res
+    data: res
 });
 
 export const fullnameUpdate = (res) => ({
     type: Config.FULLNAME_UPDATE,
-    data:res
+    data: res
 });
 
 export const fileUpload = (res) => ({
     type: Config.FILEUPLOAD,
-    data:res
+    data: res
 });
 
 export const fileClear = (res) => ({
     type: Config.FILECLEAR,
-    data:res
+    data: res
 });
 
 export const headerShow = (res) => ({
     type: Config.HEARDER,
-    data:res
+    data: res
 });
 
 export const sendFile = (res) => ({
     type: Config.SENDFILE,
-    data:res
+    data: res
 });
 
+export const handelModal = (res) => ({
+    type: Config.MODAL,
+    data: res
+});
 
-
-
-
+export const handelsSpecialChareactor = (res) => ({
+    type: Config.SHOWSPECIAL,
+    data: res
+});
 
 
 
@@ -67,7 +72,7 @@ export const onAccountsFetched = (accounts) => async (dispatch) => {
         let nameB = accountDetailsB.accountName.toUpperCase();
         return (nameA < nameB) ? -1 : (nameB > nameA) ? 1 : 0;
     });
-    dispatch ({
+    dispatch({
         type: 'ACCOUNT_FILE_SELECTED',
         payload: accounts
     });

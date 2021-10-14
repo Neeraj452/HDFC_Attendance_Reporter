@@ -1,6 +1,9 @@
 
 
 const Config = {
+    
+    SHOWSPECIAL:"SHOWSPECIAL",
+    MODAL:"MODAL",
     SENDFILE:"SENDFILE",
     HEARDER:"HEARDER",
     FILECLEAR:"FILECLEAR",
