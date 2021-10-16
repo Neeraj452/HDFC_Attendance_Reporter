@@ -27,8 +27,13 @@ function UploadRecord() {
             if (!line || !line.trim()) return;
             let lineParts = line.split("\t").map(linePart => linePart.trim());
             console.log("lineParts", lineParts)
+            let recordInfo = await AccountNumbersUtils.getupload_file_info()
+            console.log("recordInfo", recordInfo.length)
+            let recordDetails = await AccountNumbersUtils.getupload_file_details()
+            console.log("recordDetails2", recordDetails)
             let objectToStore = {
-                  recordId: myState.FileData.length > 0 ? myState.FileData[myState.FileData.length - 1].infoId + 1 : 0,
+                  id: recordDetails.length + index,
+                  recordId: recordInfo.length > 0 ? recordInfo[recordInfo.length - 1].id + 1 : 1,
                   No: lineParts[0],
                   Mchn: lineParts[1],
                   EnNo: lineParts[2],
@@ -37,6 +42,7 @@ function UploadRecord() {
                   IOMd: lineParts[5],
                   DateTime: lineParts[6],
             }
+
             AccountNumbersUtils.addFileDetails(objectToStore)
       }
       const handalFile = async (FileObjects) => {
@@ -55,7 +61,7 @@ function UploadRecord() {
             const d = new Date();
             const hour = d.getHours()
             const suffix = hour >= 12 ? "PM" : "AM";
-            var h = d.getHours()
+            let h = d.getHours()
             if (h === 12) {
                   h = 12
             }
@@ -65,25 +71,24 @@ function UploadRecord() {
             if (h < 10) {
                   h = "0" + h
             }
-            var m = d.getMinutes()
+            let m = d.getMinutes()
             if (m < 10) {
                   m = "0" + m
             }
 
             const time = h + ":" + m + " " + suffix
             const date = (monthNames[d.getMonth()] + " " + d.getDate() + " " + d.getFullYear() + " " + time)
+            let recordInfo = await AccountNumbersUtils.getupload_file_info()
             let object = {
-                  infoId: myState.FileData.length > 0 ? myState.FileData[myState.FileData.length - 1].infoId + 1 : 0,
+                  id: recordInfo.length > 0 ? recordInfo[recordInfo.length - 1].id + 1 : 1,
                   filename: FileObjects.name,
                   date: date
             }
+
             AccountNumbersUtils.addFileInfo(object)
       }
-      const modalShow = (id, infoId) => {
-            let object = {
-                  id, infoId
-            }
-            setId(object)
+      const modalShow = (id) => {
+            setId(id)
             dispatch(handelModal(true))
       }
       return (
@@ -99,7 +104,6 @@ function UploadRecord() {
                                     <h5 className="mb-3">
                                           <strong></strong>
                                     </h5>
-
                                     <table className="table  table-striped">
                                           <thead>
                                                 <tr className="">
@@ -112,14 +116,14 @@ function UploadRecord() {
                                           <tbody>
                                                 {
                                                       myState.FileData && (myState.FileData).map((Element, index) => {
-                                                            const { id, infoId, filename, date } = Element
+                                                            const { id, filename, date } = Element
                                                             return (
                                                                   <tr>
                                                                         <td className="col-sm-2 py-4">{index + 1}</td>
                                                                         <td className="col-sm-3 py-4" >{filename}</td>
                                                                         <td className=" col-sm-3 py-4">{date}</td>
-                                                                        <td className="pt-3"><button type="button" onClick={() => AccountNumbersUtils.Download(infoId)} className=" btn btn-primary mr-1">Download</button>
-                                                                              <button type="button" onClick={() => modalShow(id, infoId)} className=" btn btn-danger col-sm-4  ">Remove</button>
+                                                                        <td className="pt-3"><button type="button" onClick={() => AccountNumbersUtils.Download(id)} className=" btn btn-primary mr-1">Download</button>
+                                                                              <button type="button" onClick={() => modalShow(id)} className=" btn btn-danger col-sm-4">Remove</button>
                                                                         </td>
                                                                   </tr>
                                                             )
@@ -140,13 +144,13 @@ function UploadRecord() {
                         <Modal.Footer>
                               <Button onClick={() => AccountNumbersUtils.deleteFileInfo(id)} style={{ width: "80px" }}>Yes</Button>
                         </Modal.Footer>
-                  </Modal>}
+                  </Modal>
+                  }
             </div>
 
       )
 
 }
-
 export default UploadRecord;
 
 

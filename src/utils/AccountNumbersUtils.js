@@ -6,13 +6,9 @@ import PromisifyFileReader from 'promisify-file-reader';
 
 const db = new Dexie('AttendanceReporter');
 db.version(1).stores({
-    employee: '++id,username,fullname,company'
-});
-db.version(1).stores({
-    upload_file_details: "++id,recordId, No,Mchn, EnNo, Name, Mode, IOMd, DateTime"
-})
-db.version(1).stores({
-    upload_file_info: "++id,infoId,filename,date"
+    employee: 'id,username,fullname,company',
+    upload_file_details: "id,recordId, No,Mchn, EnNo, Name, Mode, IOMd, DateTime",
+    upload_file_info: "id,filename,date"
 })
 
 export default class AccountNumbersUtils {
@@ -67,7 +63,7 @@ export default class AccountNumbersUtils {
     }
 
     static getEmployee = async () => {
-        var allPosts = await db.employee.toArray();
+        let allPosts = await db.employee.toArray();
         console.log("allPosts", allPosts)
         store.dispatch(addList(allPosts))
     }
@@ -99,38 +95,43 @@ export default class AccountNumbersUtils {
     }
 
     static getFileInfo = async () => {
-        var allPosts = await db.upload_file_info.toArray();
+        let allPosts = await db.upload_file_info.toArray();
         console.log("allPosts", db.upload_file_info)
         store.dispatch(fileUpload(allPosts))
     }
 
     static addFileDetails = (object) => {
-        db.upload_file_details.add(object).then(async () => {
-            let allPosts = await db.upload_file_details.toArray();
-        });
+        db.upload_file_details.add(object)
     }
 
-    static deleteFileInfo = async (object) => {
+    static deleteFileInfo = async (id) => {
         let recordDetails = await db.upload_file_details.toArray();
-        let filterRecord = recordDetails.filter((item) => item.recordId === object.infoId);
+        let filterRecord = recordDetails.filter((item) => item.recordId === id);
         filterRecord.forEach((element) => {
             db.upload_file_details.delete(element.id);
         });
-        db.upload_file_info.delete(object.id)
-        store.dispatch(fileClear(object.id))
+        db.upload_file_info.delete(id)
+        store.dispatch(fileClear(id))
         store.dispatch(handelModal(false))
     }
-
-    static Download = async (recordno) => {
+    static addSpace = (Name) => {
+        let s = 13
+        let len = Name.length
+        s = s - len
+        let space = " "
+        let space1 = space.repeat(s)
+        return space1
+    }
+    static Download = async (id) => {
         let text = []
         let allDataFile1 = await db.upload_file_details.toArray()
         let finaldata = allDataFile1.filter((Element) => {
-            return Element.recordId === recordno
+            return Element.recordId === id
         })
         await finaldata.map((Element, index) => {
             const { No, Mchn, EnNo, Name, Mode, IOMd, DateTime } = Element
-            text[0] = "No" + "     " + "Mchn" + "     " + "EnNo" + "        " + " Name" + "    " + "Mode" + "    " + " IOMd" + "    " + "DateTime"
-            text[index + 1] = No + " " + Mchn + "      " + EnNo + "     " + Name + "    " + Mode + "          " + IOMd + "   " + DateTime;
+            text[0] = "No" + AccountNumbersUtils.addSpace("No") + "Mchn" + AccountNumbersUtils.addSpace("Mchn") + "EnNo" + AccountNumbersUtils.addSpace("EnNo") + "Name" + AccountNumbersUtils.addSpace("Name") + "Mode" + AccountNumbersUtils.addSpace("Mode") + "IOMd" + AccountNumbersUtils.addSpace("IOMd") + "DateTime"
+            text[index + 1] = No + AccountNumbersUtils.addSpace(No) + Mchn + AccountNumbersUtils.addSpace(Mchn) + EnNo + AccountNumbersUtils.addSpace(EnNo) + Name + AccountNumbersUtils.addSpace(Name) + Mode + AccountNumbersUtils.addSpace(Mode) + IOMd + AccountNumbersUtils.addSpace(IOMd) + DateTime;
         })
         text = text.join("\n")
         console.log("finaldata", text)
@@ -143,6 +144,16 @@ export default class AccountNumbersUtils {
             element.click();
         }, 1000)
     }
-
+    static getupload_file_info = async () => {
+        let recordInfo = await db.upload_file_info.toArray();
+        return recordInfo
+    }
+    static getupload_file_details = async () => {
+        let recordDetails = await db.upload_file_details.toArray();
+        return recordDetails
+    }
+    static getEmployee = async () => {
+        return await db.employee.toArray()
+    }
 
 }

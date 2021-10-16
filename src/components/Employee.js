@@ -16,15 +16,17 @@ function Employee() {
             dispatch(headerShow(false))
 
       }, [])
-      const handleSubmit = (e) => {
+      const handleSubmit = async (e) => {
             e.preventDefault();
-            var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+            let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 
             if (format.test(username) || format.test(fullname) || format.test(company)) {
                   dispatch(handelsSpecialChareactor(true))
             }
-            else if (username != "" && fullname != "" && company != "") {
+            else if (username !== "" && fullname !== "" && company !== "") {
+                  let employeeInfo = await AccountNumbersUtils.getEmployee()
                   let object = {
+                        id: employeeInfo.length > 0 ? employeeInfo[employeeInfo.length - 1].id + 1 : 1,
                         username: username,
                         fullname: fullname,
                         company: company
@@ -52,7 +54,7 @@ function Employee() {
       })
 
       const update = (id, name) => {
-            var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+            let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
             if (format.test(name)) {
                   dispatch(handelsSpecialChareactor(true))
             }
@@ -65,7 +67,7 @@ function Employee() {
             }
       }
       const update1 = (id, name) => {
-            var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+            let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
             if (format.test(name)) {
                   dispatch(handelsSpecialChareactor(true))
             }
@@ -78,7 +80,7 @@ function Employee() {
             }
       }
       const update2 = (id, name) => {
-            var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+            let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
             if (format.test(name)) {
                   dispatch(handelsSpecialChareactor(true))
             } else {
