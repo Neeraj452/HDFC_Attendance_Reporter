@@ -125,6 +125,11 @@ export default class AccountNumbersUtils {
     static Download = async (id) => {
         let text = []
         let allDataFile1 = await db.upload_file_details.toArray()
+        let allDataInfo = await db.upload_file_info.toArray()
+        let finaldataInfo = allDataInfo.filter((Element) => {
+            return Element.id === id
+        })
+        let fileName = finaldataInfo[0].filename
         let finaldata = allDataFile1.filter((Element) => {
             return Element.recordId === id
         })
@@ -139,7 +144,7 @@ export default class AccountNumbersUtils {
             const element = document.createElement("a");
             const file = new Blob([text], { type: 'text/plain' });
             element.href = URL.createObjectURL(file);
-            element.download = "filename";
+            element.download = fileName;
             document.body.appendChild(element);
             element.click();
         }, 1000)

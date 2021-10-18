@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
-import { headerShow, handelModal } from '../actions/AccountStatementAction'
+import { headerShow, handelModal, handelFileError } from '../actions/AccountStatementAction'
 import Dropzone from './Dropzone';
 import PromisifyFileReader from 'promisify-file-reader';
 import AccountNumbersUtils from '../utils/AccountNumbersUtils';
@@ -13,7 +13,6 @@ function UploadRecord() {
       const onDrop = useCallback(acceptedFiles => {
             handalFile(acceptedFiles[0]);
       });
-
       myState.FileData.sort((a, b) => {
             let da = (new Date(a.date)).getTime() / 1000.0,
                   db = (new Date(b.date)).getTime() / 1000.0;
@@ -49,20 +48,26 @@ function UploadRecord() {
             console.log("FileObjectsname", FileObjects.name);
             let lines = (await PromisifyFileReader.readAsText(FileObjects)).split("\n");
             console.log("line", lines)
-
-            for (let i = 1; i < lines.length; i++) {
-                  let line = lines[i];
-                  saveLineToStorageUtils(line, i);
+            let lineParts1 = lines[0].split("\t").map(linePart => linePart.trim());
+            console.log("lines[0]", lineParts1)
+            if (lineParts1[0] === "No" && lineParts1[1] === "Mchn" && lineParts1[2] === "EnNo" && lineParts1[3] === "" && lineParts1[4] === "Name" && lineParts1[5] === "" && lineParts1[6] === "Mode" && lineParts1[7] === "IOMd" && lineParts1[8] === "DateTime" && lineParts1[9] === "") {
+                  for (let i = 1; i < lines.length; i++) {
+                        let line = lines[i];
+                        saveLineToStorageUtils(line, i);
+                  }
+                  let recordInfo = await AccountNumbersUtils.getupload_file_info()
+                  let date = await DateUtils.formatForFileName()
+                  console.log("datainfo", date)
+                  let object = {
+                        id: recordInfo.length > 0 ? recordInfo[recordInfo.length - 1].id + 1 : 1,
+                        filename: FileObjects.name,
+                        date: date
+                  }
+                  AccountNumbersUtils.addFileInfo(object)
             }
-            let recordInfo = await AccountNumbersUtils.getupload_file_info()
-            let date = await DateUtils.formatForFileName()
-            console.log("datainfo", date)
-            let object = {
-                  id: recordInfo.length > 0 ? recordInfo[recordInfo.length - 1].id + 1 : 1,
-                  filename: FileObjects.name,
-                  date: date
+            else {
+                  dispatch(handelFileError(true))
             }
-            AccountNumbersUtils.addFileInfo(object)
       }
       const modalShow = (id) => {
             setId(id)
@@ -71,7 +76,7 @@ function UploadRecord() {
       return (
             <div className="container mb-5">
                   <main className="App">
-                        <Dropzone onDrop={onDrop} />
+                        <Dropzone onDrop={onDrop} accept="txt/" />
                   </main>
                   {myState.FileData.length > 0 &&
                         <div className="row">
@@ -118,6 +123,19 @@ function UploadRecord() {
                         <Modal.Body>Are you sure want to remove this record?</Modal.Body>
                         <Modal.Footer>
                               <Button onClick={() => AccountNumbersUtils.deleteFileInfo(id)} style={{ width: "80px" }}>Yes</Button>
+                        </Modal.Footer>
+                  </Modal>
+                  }
+
+                  {myState.fileerror && <Modal show={myState.fileerror}>
+                        <Modal.Header><h3>Error</h3>
+                              <button className="close" onClick={() => dispatch(handelFileError(false))} data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                              </button>
+                        </Modal.Header>
+                        <Modal.Body>Invalid file</Modal.Body>
+                        <Modal.Footer>
+                              <Button onClick={() => dispatch(handelFileError(false))} style={{ width: "80px" }}>Ok</Button>
                         </Modal.Footer>
                   </Modal>
                   }

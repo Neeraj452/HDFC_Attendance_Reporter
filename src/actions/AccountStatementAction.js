@@ -51,6 +51,11 @@ export const handelsSpecialChareactor = (res) => ({
     data: res
 });
 
+export const handelFileError = (res) => ({
+    type: Config.FILEERROR,
+    data: res
+});
+
 
 
 
