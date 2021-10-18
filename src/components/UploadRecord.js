@@ -5,6 +5,7 @@ import { headerShow, handelModal } from '../actions/AccountStatementAction'
 import Dropzone from './Dropzone';
 import PromisifyFileReader from 'promisify-file-reader';
 import AccountNumbersUtils from '../utils/AccountNumbersUtils';
+import DateUtils from '../utils/DateUtils'
 function UploadRecord() {
       const [id, setId] = useState("")
       const dispatch = useDispatch()
@@ -28,9 +29,7 @@ function UploadRecord() {
             let lineParts = line.split("\t").map(linePart => linePart.trim());
             console.log("lineParts", lineParts)
             let recordInfo = await AccountNumbersUtils.getupload_file_info()
-            console.log("recordInfo", recordInfo.length)
             let recordDetails = await AccountNumbersUtils.getupload_file_details()
-            console.log("recordDetails2", recordDetails)
             let objectToStore = {
                   id: recordDetails.length + index,
                   recordId: recordInfo.length > 0 ? recordInfo[recordInfo.length - 1].id + 1 : 1,
@@ -55,36 +54,14 @@ function UploadRecord() {
                   let line = lines[i];
                   saveLineToStorageUtils(line, i);
             }
-            const monthNames = ["Jan", "Feb", "Mar", "April", "May", "June",
-                  "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-            const d = new Date();
-            const hour = d.getHours()
-            const suffix = hour >= 12 ? "PM" : "AM";
-            let h = d.getHours()
-            if (h === 12) {
-                  h = 12
-            }
-            if (h > 12) {
-                  h = h - 12
-            }
-            if (h < 10) {
-                  h = "0" + h
-            }
-            let m = d.getMinutes()
-            if (m < 10) {
-                  m = "0" + m
-            }
-
-            const time = h + ":" + m + " " + suffix
-            const date = (monthNames[d.getMonth()] + " " + d.getDate() + " " + d.getFullYear() + " " + time)
             let recordInfo = await AccountNumbersUtils.getupload_file_info()
+            let date = await DateUtils.formatForFileName()
+            console.log("datainfo", date)
             let object = {
                   id: recordInfo.length > 0 ? recordInfo[recordInfo.length - 1].id + 1 : 1,
                   filename: FileObjects.name,
                   date: date
             }
-
             AccountNumbersUtils.addFileInfo(object)
       }
       const modalShow = (id) => {
@@ -92,8 +69,6 @@ function UploadRecord() {
             dispatch(handelModal(true))
       }
       return (
-
-
             <div className="container mb-5">
                   <main className="App">
                         <Dropzone onDrop={onDrop} />
@@ -149,7 +124,6 @@ function UploadRecord() {
             </div>
 
       )
-
 }
 export default UploadRecord;
 

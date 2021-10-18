@@ -19,6 +19,16 @@ export default class DateUtils {
         let dd = date.getDate();
         let mm = Config.THREE_LETTER_MONTHS[date.getMonth()];
         let yyyy = date.getFullYear();
-        return DateUtils.formatToTwoDigits(dd) + DateUtils.formatToTwoDigits(mm) + yyyy;
+        const hour = date.getHours()
+        const suffix = hour >= 12 ? "PM" : "AM";
+        let h = date.getHours()
+        h = DateUtils.formatToTwoDigits(h)
+        if (h > 12) {
+            h = h - 12
+        }
+        let m = date.getMinutes()
+        DateUtils.formatToTwoDigits(m)
+        const time = h + ":" + m + " " + suffix
+        return mm + " " + DateUtils.formatToTwoDigits(dd) + " " + yyyy + " " + time;
     }
 }
