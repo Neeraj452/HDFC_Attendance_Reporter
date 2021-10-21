@@ -12,9 +12,7 @@ function Employee() {
       const myState = useSelector((store) => store.accountStatementReducer);
       useEffect(() => {
             AccountNumbersUtils.getEmployee()
-
             dispatch(headerShow(false))
-
       }, [])
       const handleSubmit = async (e) => {
             e.preventDefault();
@@ -24,7 +22,7 @@ function Employee() {
                   dispatch(handelsSpecialChareactor(true))
             }
             else if (username !== "" && fullname !== "" && company !== "") {
-                  let employeeInfo = await AccountNumbersUtils.getEmployee()
+                  let employeeInfo = await AccountNumbersUtils.getEmployeeId()
                   let object = {
                         id: employeeInfo.length > 0 ? employeeInfo[employeeInfo.length - 1].id + 1 : 1,
                         username: username,
@@ -36,10 +34,7 @@ function Employee() {
                   setfullname("")
                   setCompany("")
             }
-
-
       }
-
       myState.EmployeeData.sort((a, b) => {
             let fa = a.username.toLowerCase(),
                   fb = b.username.toLowerCase();
@@ -52,7 +47,6 @@ function Employee() {
             }
             return 0;
       })
-
       const update = (id, name) => {
             let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
             if (format.test(name)) {
@@ -174,6 +168,7 @@ function Employee() {
                         </Modal.Header>
                         <Modal.Body>Please Remove Special Charactors </Modal.Body>
                         <Modal.Footer>
+                              <Button onClick={() => dispatch(handelsSpecialChareactor(false))} style={{ width: "80px" }}>Ok</Button>
                         </Modal.Footer>
                   </Modal>}
             </div>

@@ -114,10 +114,10 @@ class HomeScreen extends React.Component {
                         >
                             {({ getRootProps, getInputProps }) => (
                                 <section>
-                                    {/* <div {...getRootProps()} style={{ height: '150px', textAlign: 'center', alignItems: 'center' }} ref={this.textInput}>
+                                    <div {...getRootProps()} style={{ height: '150px', textAlign: 'center', alignItems: 'center' }} ref={this.textInput}>
                                         <input {...getInputProps()} />
                                         <p className="pt-5">Drag and drop file to convert</p>
-                                    </div> */}
+                                    </div>
                                 </section>
                             )}
                         </Dropzone>
@@ -125,7 +125,7 @@ class HomeScreen extends React.Component {
 
                         {this.getAccountsView()}
                     </div> :
-                    <div className="container pt-5">
+                    <div className="container">
                         {/* <div className="row align-items-center justify-content-center text-center">
                             {this.props.accountStatement.loading ?
                                 <div className="progress rounded-pill" style={{ width: '30%', margin: '50px', height: '40px' }}>
@@ -147,17 +147,21 @@ class HomeScreen extends React.Component {
                         </div> */}
                     </div>
                 }
-            </div>
+
+            </div >
 
             {this.renderClearDialogView()}
 
             {this.renderErrorDialogView()}
 
-            {this.props.accountStatement.error
-                ?
-                <div className="modal-backdrop fade show" />
-                : null}
-        </Fragment>
+            {
+                this.props.accountStatement.error
+                    ?
+                    <div className="modal-backdrop fade show" />
+                    : null
+            }
+        </Fragment >
+
     );
 
     renderErrorDialogView = () => (

@@ -25,7 +25,6 @@ export function accountStatementReducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case Config.ADD:
             state.EmployeeData = action.data
-
             return { ...state }
 
 
@@ -52,12 +51,10 @@ export function accountStatementReducer(state = INITIAL_STATE, action) {
             return { ...state }
 
         case Config.FILEUPLOAD:
-            console.log("action.data", action.data)
             state.FileData = action.data
             return { ...state }
 
         case Config.FILECLEAR:
-            console.log("action.data", action.data)
             state.FileData = state.FileData.filter((Element) =>
                 (Element.id !== action.data)
             )
@@ -70,16 +67,13 @@ export function accountStatementReducer(state = INITIAL_STATE, action) {
 
         case Config.SENDFILE:
             state.fileContent = action.data
-            console.log("fileContent", state.fileContent)
             return { ...state }
 
         case Config.MODAL:
-            console.log(action.data)
             state.show = action.data
             return { ...state }
 
         case Config.SHOWSPECIAL:
-            console.log(action.data)
             state.showSpecial = action.data
             return { ...state }
 

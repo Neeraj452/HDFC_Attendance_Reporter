@@ -18,15 +18,13 @@ function UploadRecord() {
                   db = (new Date(b.date)).getTime() / 1000.0;
             return db - da;
       });
-
       useEffect(() => {
             AccountNumbersUtils.getFileInfo()
             dispatch(headerShow(false))
       }, [])
       const saveLineToStorageUtils = async (line, index) => {
             if (!line || !line.trim()) return;
-            let lineParts = line.split("\t").map(linePart => linePart.trim());
-            console.log("lineParts", lineParts)
+            let lineParts = line.split("\t");
             let recordInfo = await AccountNumbersUtils.getupload_file_info()
             let recordDetails = await AccountNumbersUtils.getupload_file_details()
             let objectToStore = {
@@ -44,20 +42,15 @@ function UploadRecord() {
             AccountNumbersUtils.addFileDetails(objectToStore)
       }
       const handalFile = async (FileObjects) => {
-            console.log(FileObjects)
-            console.log("FileObjectsname", FileObjects.name);
             let lines = (await PromisifyFileReader.readAsText(FileObjects)).split("\n");
-            console.log("line", lines)
             let lineParts1 = lines[0].split("\t").map(linePart => linePart.trim());
-            console.log("lines[0]", lineParts1)
-            if (lineParts1[0] === "No" && lineParts1[1] === "Mchn" && lineParts1[2] === "EnNo" && lineParts1[3] === "" && lineParts1[4] === "Name" && lineParts1[5] === "" && lineParts1[6] === "Mode" && lineParts1[7] === "IOMd" && lineParts1[8] === "DateTime" && lineParts1[9] === "") {
+            if (lineParts1[0] === "No" && lineParts1[1] === "Mchn" && lineParts1[2] === "EnNo" && lineParts1[4] === "Name" && lineParts1[6] === "Mode" && lineParts1[7] === "IOMd" && lineParts1[8] === "DateTime") {
                   for (let i = 1; i < lines.length; i++) {
                         let line = lines[i];
                         saveLineToStorageUtils(line, i);
                   }
                   let recordInfo = await AccountNumbersUtils.getupload_file_info()
                   let date = await DateUtils.formatForFileName()
-                  console.log("datainfo", date)
                   let object = {
                         id: recordInfo.length > 0 ? recordInfo[recordInfo.length - 1].id + 1 : 1,
                         filename: FileObjects.name,
@@ -74,7 +67,7 @@ function UploadRecord() {
             dispatch(handelModal(true))
       }
       return (
-            <div className="container mb-5">
+            <div className="container">
                   <main className="App">
                         <Dropzone onDrop={onDrop} accept="txt/" />
                   </main>
@@ -140,7 +133,6 @@ function UploadRecord() {
                   </Modal>
                   }
             </div>
-
       )
 }
 export default UploadRecord;

@@ -13,22 +13,16 @@ const UserInput = () => {
   const handleSubmit = () => {
     if (token === "" || key === "") {
       setShow(true)
-
-
     }
     else {
-      console.log("token", token)
       history.push('/Employee')
     }
   }
-
-
   useEffect(() => {
     dispatch(headerShow(true))
   }, [])
   return (
     <div>
-
       {show && <Modal show={show}>
         <Modal.Header><h3>Login</h3>
           <button className="close" onClick={() => setShow(false)} data-dismiss="modal" aria-label="Close">
@@ -40,7 +34,6 @@ const UserInput = () => {
           <Button type='button' onClick={() => setShow(false)} style={{ width: "80px" }}> Ok </Button>
         </Modal.Footer>
       </Modal>}
-
       <div className="container">
         <div className="row col-7 mx-auto align-items-center d-flex justify-content-center">
           <form className="form-horizontal hr" required>
@@ -48,7 +41,6 @@ const UserInput = () => {
               <div className="control-label col-sm-4 col-lg-5">
                 <lebel className="font-size "> AWS Token </lebel>
               </div>
-
               <div className="col-sm-4">
                 <input type="text" className=" form-control" id="user" onChange={(event) => setToken(event.target.value)} value={token}></input>
               </div>
@@ -71,14 +63,9 @@ const UserInput = () => {
               </button>
             </div>
           </form>
-
         </div>
       </div>
-
-
     </div>
-
-
   );
 }
 export default UserInput;

@@ -2,15 +2,14 @@ import Dexie from "dexie";
 import { accDetailsStatus, onAccountsFetched, addList, dataDelete, handelModal, fileUpload, fileClear } from "../actions/AccountStatementAction";
 import store from '../store'
 import Config from "./Config";
+import { useDispatch } from 'react-redux';
 import PromisifyFileReader from 'promisify-file-reader';
-
 const db = new Dexie('AttendanceReporter');
 db.version(1).stores({
     employee: 'id,username,fullname,company',
     upload_file_details: "id,recordId, No,Mchn, EnNo, Name, Mode, IOMd, DateTime",
     upload_file_info: "id,filename,date"
 })
-
 export default class AccountNumbersUtils {
     static parseFile = async (FileObject) => {
         store.dispatch(accDetailsStatus({ type: Config.ACCOUNT_DETAILS_COPY_STARTING }));
@@ -28,7 +27,6 @@ export default class AccountNumbersUtils {
                 throw err;
             }
         }
-        console.log("in parseFile, the object saved is \n\n" + JSON.stringify(accounts));
         store.dispatch(onAccountsFetched(accounts));
     }
     static saveLineToStorageUtils = async (line) => {
@@ -39,35 +37,31 @@ export default class AccountNumbersUtils {
             accountNumber: lineParts[1],
             accountName: lineParts[2]
         };
-        console.log("in AccountNumbersUtils.saveLineToStorageUtils, about to save: \n\n" + JSON.stringify(objectToStore));
         await AccountNumbersUtils.initDB().add(objectToStore);
         return objectToStore;
     };
-
     static initDB = () => {
         return db.accountDetails;
     };
-
     static getAccountDetails = async (fileId) => await AccountNumbersUtils.initDB().where("fileId").equals(fileId).toArray();
-
     static getAllAccountDetails = async () => {
         let accounts = (await AccountNumbersUtils.initDB().toArray());
         return accounts;
     };
-
     static addEmployee = (object) => {
         db.employee.add(object).then(async () => {
             let allPosts = await db.employee.toArray();
             store.dispatch(addList(allPosts))
         });
     }
-
     static getEmployee = async () => {
         let allPosts = await db.employee.toArray();
-        console.log("allPosts", allPosts)
         store.dispatch(addList(allPosts))
-    }
 
+    }
+    static getEmployeeId = async () => {
+        return await db.employee.toArray();
+    }
     static dataDelete1 = (id) => {
         db.employee.delete(id)
         store.dispatch(dataDelete(id))
@@ -76,34 +70,25 @@ export default class AccountNumbersUtils {
     static update = (object) => {
         db.employee.update(object.id, { "fullname": object.name })
     }
-
     static update1 = (object) => {
-        console.log(object.id, object.name)
         db.employee.update(object.id, { "username": object.name })
     }
-
     static update2 = (object) => {
         db.employee.update(object.id, { "company": object.name })
     }
-
     static addFileInfo = (object) => {
         db.upload_file_info.add(object).then(async () => {
             let allPosts = await db.upload_file_info.toArray();
             store.dispatch(fileUpload(allPosts))
         });
-
     }
-
     static getFileInfo = async () => {
         let allPosts = await db.upload_file_info.toArray();
-        console.log("allPosts", db.upload_file_info)
         store.dispatch(fileUpload(allPosts))
     }
-
     static addFileDetails = (object) => {
         db.upload_file_details.add(object)
     }
-
     static deleteFileInfo = async (id) => {
         let recordDetails = await db.upload_file_details.toArray();
         let filterRecord = recordDetails.filter((item) => item.recordId === id);
@@ -113,14 +98,6 @@ export default class AccountNumbersUtils {
         db.upload_file_info.delete(id)
         store.dispatch(fileClear(id))
         store.dispatch(handelModal(false))
-    }
-    static addSpace = (Name) => {
-        let s = 13
-        let len = Name.length
-        s = s - len
-        let space = " "
-        let space1 = space.repeat(s)
-        return space1
     }
     static Download = async (id) => {
         let text = []
@@ -135,11 +112,11 @@ export default class AccountNumbersUtils {
         })
         await finaldata.map((Element, index) => {
             const { No, Mchn, EnNo, Name, Mode, IOMd, DateTime } = Element
-            text[0] = "No" + AccountNumbersUtils.addSpace("No") + "Mchn" + AccountNumbersUtils.addSpace("Mchn") + "EnNo" + AccountNumbersUtils.addSpace("EnNo") + "Name" + AccountNumbersUtils.addSpace("Name") + "Mode" + AccountNumbersUtils.addSpace("Mode") + "IOMd" + AccountNumbersUtils.addSpace("IOMd") + "DateTime"
-            text[index + 1] = No + AccountNumbersUtils.addSpace(No) + Mchn + AccountNumbersUtils.addSpace(Mchn) + EnNo + AccountNumbersUtils.addSpace(EnNo) + Name + AccountNumbersUtils.addSpace(Name) + Mode + AccountNumbersUtils.addSpace(Mode) + IOMd + AccountNumbersUtils.addSpace(IOMd) + DateTime;
+            text[0] = "No" + "\t" + "Mchn" + "\t" + "EnNo" + "\t\t" + "Name" + "\t\t" + "Mode" + "\t" + "IOMd" + "\t" + "DateTime" + "\t" + "\r"
+            text[index + 1] = No + "\t" + Mchn + "\t" + EnNo + "\t" + Name + "\t" + Mode + "\t" + IOMd + "\t" + DateTime;
+
         })
         text = text.join("\n")
-        console.log("finaldata", text)
         setTimeout(await function () {
             const element = document.createElement("a");
             const file = new Blob([text], { type: 'text/plain' });
@@ -156,9 +133,6 @@ export default class AccountNumbersUtils {
     static getupload_file_details = async () => {
         let recordDetails = await db.upload_file_details.toArray();
         return recordDetails
-    }
-    static getEmployee = async () => {
-        return await db.employee.toArray()
     }
 
 }

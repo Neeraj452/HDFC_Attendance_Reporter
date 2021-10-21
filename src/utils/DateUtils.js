@@ -13,7 +13,6 @@ export default class DateUtils {
     static formatToTwoDigits(number) {
         return ("0" + number).slice(-2);
     }
-
     static formatForFileName = () => {
         let date = new Date();
         let dd = date.getDate();
@@ -25,9 +24,12 @@ export default class DateUtils {
         h = DateUtils.formatToTwoDigits(h)
         if (h > 12) {
             h = h - 12
+            if (h < 10) {
+                h = DateUtils.formatToTwoDigits(h)
+            }
         }
         let m = date.getMinutes()
-        DateUtils.formatToTwoDigits(m)
+        m = DateUtils.formatToTwoDigits(m)
         const time = h + ":" + m + " " + suffix
         return mm + " " + DateUtils.formatToTwoDigits(dd) + " " + yyyy + " " + time;
     }
