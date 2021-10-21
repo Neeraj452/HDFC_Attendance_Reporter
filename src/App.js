@@ -1,5 +1,6 @@
 // App.js - WEB
 import React from "react";
+import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import UserInput from "./components/UserInput"
 import Employee from "./components/Employee";

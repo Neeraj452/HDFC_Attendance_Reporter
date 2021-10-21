@@ -50,7 +50,7 @@ class HomeScreen extends React.Component {
             <Fragment>
                 <nav className="navbar navbar-expand-sm mt-2 ">
                     <div className="container">
-                        <div className="float-start">
+                        <div className="float-start my-2">
                             <a href="https://rjs.in" target="_blank" className=" text-dark d-inline"><img src={RJSlogo} alt="RJS" width="25" className="mr-2" /></a>
                             <NavLink className="text-dark text-decoration-none d-inline " to="/" style={{ fontSize: "20px" }}>Attendance Reporter </NavLink>
                         </div>
