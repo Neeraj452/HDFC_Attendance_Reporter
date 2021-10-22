@@ -1,6 +1,7 @@
 
 
 const Config = {
+    BOXCOLOUR: "BOXCOLOUR",
     FILEERROR: "FILEERROR",
     SHOWSPECIAL: "SHOWSPECIAL",
     MODAL: "MODAL",

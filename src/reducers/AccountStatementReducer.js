@@ -16,7 +16,10 @@ const INITIAL_STATE = {
     hearder: "",
     dataBaseData: [],
     fileContent: "",
-    showSpecial: false
+    showSpecial: false,
+    box_type: "",
+    box_color: true,
+    box_index: ""
 }
 
 
@@ -24,7 +27,7 @@ export function accountStatementReducer(state = INITIAL_STATE, action) {
     const { payload } = action;
     switch (action.type) {
         case Config.ADD:
-            state.EmployeeData = action.data
+            state.EmployeeData = action.data;
             return { ...state }
 
 
@@ -36,7 +39,10 @@ export function accountStatementReducer(state = INITIAL_STATE, action) {
 
         case Config.EMPLOYEE_UPDATE:
             let index = action.data.index;
+            state.box_index = index;
             let type = action.data.type;
+            state.box_type = type;
+            state.box_color = true;
             let value = action.data.value;
             let employee = state.EmployeeData[index];
             if (type === 'username') {
@@ -51,7 +57,7 @@ export function accountStatementReducer(state = INITIAL_STATE, action) {
             return { ...state }
 
         case Config.FILEUPLOAD:
-            state.FileData = action.data
+            state.FileData = action.data;
             return { ...state }
 
         case Config.FILECLEAR:
@@ -62,24 +68,28 @@ export function accountStatementReducer(state = INITIAL_STATE, action) {
             return { ...state }
 
         case Config.HEARDER:
-            state.hearder = action.data
+            state.hearder = action.data;
             return { ...state }
 
         case Config.SENDFILE:
-            state.fileContent = action.data
+            state.fileContent = action.data;
             return { ...state }
 
         case Config.MODAL:
-            state.show = action.data
+            state.show = action.data;
             return { ...state }
 
         case Config.SHOWSPECIAL:
-            state.showSpecial = action.data
+            state.showSpecial = action.data;
             return { ...state }
 
         case Config.FILEERROR:
-            state.fileerror = action.data
+            state.fileerror = action.data;
             return { ...state }
+        case Config.BOXCOLOUR:
+            state.box_color = action.data;
+            return { ...state }
+
 
 
 

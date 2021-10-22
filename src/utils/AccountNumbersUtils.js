@@ -1,8 +1,7 @@
 import Dexie from "dexie";
-import { accDetailsStatus, onAccountsFetched, addList, dataDelete, handelModal, fileUpload, fileClear } from "../actions/AccountStatementAction";
+import { accDetailsStatus, onAccountsFetched, addList, dataDelete, handelModal, fileUpload, fileClear, boxColour } from "../actions/AccountStatementAction";
 import store from '../store'
 import Config from "./Config";
-import { useDispatch } from 'react-redux';
 import PromisifyFileReader from 'promisify-file-reader';
 const db = new Dexie('AttendanceReporter');
 db.version(1).stores({
@@ -69,12 +68,15 @@ export default class AccountNumbersUtils {
     }
     static update = (object) => {
         db.employee.update(object.id, { "fullname": object.name })
+        store.dispatch(boxColour(false))
     }
     static update1 = (object) => {
         db.employee.update(object.id, { "username": object.name })
+        store.dispatch(boxColour(false))
     }
     static update2 = (object) => {
         db.employee.update(object.id, { "company": object.name })
+        store.dispatch(boxColour(false))
     }
     static addFileInfo = (object) => {
         db.upload_file_info.add(object).then(async () => {
@@ -110,14 +112,14 @@ export default class AccountNumbersUtils {
         let finaldata = allDataFile1.filter((Element) => {
             return Element.recordId === id
         })
-        await finaldata.map((Element, index) => {
-            const { No, Mchn, EnNo, Name, Mode, IOMd, DateTime } = Element
-            text[0] = "No" + "\t" + "Mchn" + "\t" + "EnNo" + "\t\t" + "Name" + "\t\t" + "Mode" + "\t" + "IOMd" + "\t" + "DateTime" + "\t" + "\r"
-            text[index + 1] = No + "\t" + Mchn + "\t" + EnNo + "\t" + Name + "\t" + Mode + "\t" + IOMd + "\t" + DateTime;
+        finaldata.map((Element, index) => {
+            const { No, Mchn, EnNo, Name, Mode, IOMd, DateTime } = Element;
+            text[0] = "No" + "\t" + "Mchn" + "\t" + "EnNo" + "\t\t" + "Name" + "\t\t" + "Mode" + "\t" + "IOMd" + "\t" + "DateTime" + "\t" + "\r";
+            text[index + 1] = No + "\t" + Mchn + "\t" + EnNo + "\t" + Name + "\t\t" + Mode + "\t" + IOMd + "\t" + DateTime;
 
         })
-        text = text.join("\n")
-        setTimeout(await function () {
+        text = text.join("\n");
+        setTimeout(function () {
             const element = document.createElement("a");
             const file = new Blob([text], { type: 'text/plain' });
             element.href = URL.createObjectURL(file);
@@ -128,11 +130,10 @@ export default class AccountNumbersUtils {
     }
     static getupload_file_info = async () => {
         let recordInfo = await db.upload_file_info.toArray();
-        return recordInfo
+        return recordInfo;
     }
     static getupload_file_details = async () => {
         let recordDetails = await db.upload_file_details.toArray();
-        return recordDetails
+        return recordDetails;
     }
-
 }

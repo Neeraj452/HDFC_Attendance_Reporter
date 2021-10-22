@@ -5,24 +5,34 @@ import { useDispatch } from 'react-redux';
 import { headerShow } from '../actions/AccountStatementAction'
 
 const UserInput = () => {
-  const history = useHistory()
+  const history = useHistory();
   const dispatch = useDispatch()
-  const [token, setToken] = useState("")
-  const [key, setKey] = useState("")
-  const [show, setShow] = useState(false)
+  const [token, setToken] = useState("");
+  const [key, setKey] = useState("");
+  const [show, setShow] = useState(false);
   const handleSubmit = () => {
     if (token === "" || key === "") {
-      setShow(true)
+      setShow(true);
     }
     else {
-      console.log("token", token)
-      history.push('/Employee')
+      localStorage.setItem("token", token);
+      localStorage.setItem("key", key);
+      history.push('/Employee');
+    }
+  }
+  const getUserToken = () => {
+    const gettoken = localStorage.getItem("token");
+    const getkey = localStorage.getItem("key");
+    if (gettoken !== null && getkey !== null) {
+      history.push('/Employee');
+
     }
   }
 
 
   useEffect(() => {
     dispatch(headerShow(true))
+    getUserToken()
   }, [])
   return (
     <div>

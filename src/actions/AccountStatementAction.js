@@ -56,6 +56,11 @@ export const handelFileError = (res) => ({
     data: res
 });
 
+export const boxColour = (res) => ({
+    type: Config.BOXCOLOUR,
+    data: res
+});
+
 
 
 

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { employeeUpdate, headerShow, handelModal, handelsSpecialChareactor } from '../actions/AccountStatementAction'
+import { employeeUpdate, headerShow, handelModal, handelsSpecialChareactor, boxColour } from '../actions/AccountStatementAction'
 import AccountNumbersUtils from "../utils/AccountNumbersUtils";
 function Employee() {
       const [username, setUsername] = useState("");
       const [fullname, setfullname] = useState("");
       const [company, setCompany] = useState("");
-      const [id, setId] = useState("")
+      const [id, setId] = useState("");
       const dispatch = useDispatch()
       const myState = useSelector((store) => store.accountStatementReducer);
       useEffect(() => {
@@ -17,7 +17,6 @@ function Employee() {
       const handleSubmit = async (e) => {
             e.preventDefault();
             let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-
             if (format.test(username) || format.test(fullname) || format.test(company)) {
                   dispatch(handelsSpecialChareactor(true))
             }
@@ -49,6 +48,7 @@ function Employee() {
       })
       const update = (id, name) => {
             let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+
             if (format.test(name)) {
                   dispatch(handelsSpecialChareactor(true))
             }
@@ -109,9 +109,9 @@ function Employee() {
                                           </thead>
                                           <tr className="">
                                                 <td className=""></td>
-                                                <td className=" pt-3"><input className="" type="text" onChange={(event) => setUsername(event.target.value)} onfocus="this.value=''" value={username} /></td>
+                                                <td className=" pt-3"><input className="" type="text" onChange={(event) => setUsername(event.target.value)} value={username} /></td>
                                                 <td className=" pt-3"><input className="" type="text" onChange={(event) => setfullname(event.target.value)} value={fullname} /></td>
-                                                <td className=" pt-3"><input id="company" name="company" autoComplete="company" className="" type="text" onChange={(event) => setCompany(event.target.value)} value={company} /></td>
+                                                <td className=" pt-3"><input id="company" name="company" autoComplete="company" type="text" onChange={(event) => setCompany(event.target.value)} value={company} /></td>
                                                 <td className=" pt-3"><button type="submit" onClick={handleSubmit} className="btn btn-primary" style={{ width: "80px" }}>Add</button></td>
                                           </tr>
                                           <tbody>
@@ -120,17 +120,17 @@ function Employee() {
                                                             const { id, username, fullname, company } = Element;
                                                             return (<tr>
                                                                   <td className="pt-3">{index + 1}</td>
-                                                                  <td className="col-3 pt-3"><input className="" value={username} onChange={(event) => dispatch(employeeUpdate({
+                                                                  <td className="col-3 pt-3"><input onChange={(event) => dispatch(employeeUpdate({
                                                                         index: index,
                                                                         type: 'username',
                                                                         value: event.target.value
-                                                                  }))} onBlur={() => update1(id, username)} /></td>
-                                                                  <td className="col-3 pt-3"><input className="" onChange={(event) => dispatch(employeeUpdate({
+                                                                  }))} onBlur={() => update1(id, username)} className={myState.box_type === "username" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} value={username} /></td>
+                                                                  <td className="col-3 pt-3"><input className={myState.box_type === "fullname" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} onChange={(event) => dispatch(employeeUpdate({
                                                                         index: index,
                                                                         type: 'fullname',
                                                                         value: event.target.value
                                                                   }))} value={fullname} onBlur={() => update(id, fullname)} /></td>
-                                                                  <td className="col-3 pt-3"><input onChange={(event) => dispatch(employeeUpdate({
+                                                                  <td className="col-3 pt-3"><input className={myState.box_type === "company" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} onChange={(event) => dispatch(employeeUpdate({
                                                                         index: index,
                                                                         type: 'company',
                                                                         value: event.target.value
