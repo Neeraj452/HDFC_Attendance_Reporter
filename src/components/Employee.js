@@ -10,6 +10,9 @@ function Employee() {
       const [id, setId] = useState("");
       const dispatch = useDispatch()
       const myState = useSelector((store) => store.accountStatementReducer);
+      // console.log("myState.box_type", myState.box_type)
+      // console.log("myState.box_index", myState.box_index)
+      // console.log("myState.box_color", myState.box_color)
       useEffect(() => {
             AccountNumbersUtils.getEmployee()
             dispatch(headerShow(false))
@@ -46,7 +49,7 @@ function Employee() {
             }
             return 0;
       })
-      const update = (id, name) => {
+      const updateFullname = (id, name) => {
             let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 
             if (format.test(name)) {
@@ -57,10 +60,10 @@ function Employee() {
                         id: id,
                         name: name
                   }
-                  AccountNumbersUtils.update(object)
+                  AccountNumbersUtils.updateFullname(object)
             }
       }
-      const update1 = (id, name) => {
+      const updateUsername = (id, name) => {
             let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
             if (format.test(name)) {
                   dispatch(handelsSpecialChareactor(true))
@@ -70,10 +73,10 @@ function Employee() {
                         id: id,
                         name: name
                   }
-                  AccountNumbersUtils.update1(object)
+                  AccountNumbersUtils.updateUsername(object)
             }
       }
-      const update2 = (id, name) => {
+      const updateCompany = (id, name) => {
             let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
             if (format.test(name)) {
                   dispatch(handelsSpecialChareactor(true))
@@ -82,7 +85,7 @@ function Employee() {
                         id: id,
                         name: name
                   }
-                  AccountNumbersUtils.update2(object)
+                  AccountNumbersUtils.updateCompany(object)
             }
       }
       const modalShow = (id) => {
@@ -97,46 +100,46 @@ function Employee() {
                                     <strong>Employee Table</strong>
                               </h5>
                               <form className="">
-                                    <table className="table table-striped ">
+                                    <table className="table table-striped">
                                           <thead>
                                                 <tr className="">
-                                                      <th className="">#</th>
-                                                      <th className="col-3">Username</th>
-                                                      <th className="col-3">Full name</th>
-                                                      <th className="col-3">Company</th>
-                                                      <th className="col-3"></th>
+                                                      <th className="col-sm-1">#</th>
+                                                      <th className="col-sm-3">Username</th>
+                                                      <th className="col-sm-3">Full name</th>
+                                                      <th className="col-sm-3">Company</th>
+                                                      <th className="col-sm-2"></th>
                                                 </tr>
                                           </thead>
                                           <tr className="">
-                                                <td className=""></td>
-                                                <td className=" pt-3"><input className="" type="text" onChange={(event) => setUsername(event.target.value)} value={username} /></td>
-                                                <td className=" pt-3"><input className="" type="text" onChange={(event) => setfullname(event.target.value)} value={fullname} /></td>
-                                                <td className=" pt-3"><input id="company" name="company" autoComplete="company" type="text" onChange={(event) => setCompany(event.target.value)} value={company} /></td>
-                                                <td className=" pt-3"><button type="submit" onClick={handleSubmit} className="btn btn-primary" style={{ width: "80px" }}>Add</button></td>
+                                                <td className="col-sm-1"></td>
+                                                <td className="col-sm-3 pt-3"><input className="" type="text" onChange={(event) => setUsername(event.target.value)} value={username} /></td>
+                                                <td className="col-sm-3 pt-3"><input className="" type="text" onChange={(event) => setfullname(event.target.value)} value={fullname} /></td>
+                                                <td className="col-sm-3 pt-3"><input id="company" name="company" autoComplete="company" type="text" onChange={(event) => setCompany(event.target.value)} value={company} /></td>
+                                                <td className="col-sm-2 pt-2"><button type="submit" onClick={handleSubmit} className="btn btn-primary mt-2" style={{ width: "80px" }}>Add</button></td>
                                           </tr>
                                           <tbody>
                                                 {
                                                       myState.EmployeeData[0] && (myState.EmployeeData).map((Element, index) => {
                                                             const { id, username, fullname, company } = Element;
                                                             return (<tr>
-                                                                  <td className="pt-3">{index + 1}</td>
-                                                                  <td className="col-3 pt-3"><input onChange={(event) => dispatch(employeeUpdate({
+                                                                  <td className=" col-sm-1 pt-sm-3">{index + 1}</td>
+                                                                  <td className="col-sm-3 pt-3" ><input type="text" onChange={(event) => dispatch(employeeUpdate({
                                                                         index: index,
                                                                         type: 'username',
                                                                         value: event.target.value
-                                                                  }))} onBlur={() => update1(id, username)} className={myState.box_type === "username" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} value={username} /></td>
-                                                                  <td className="col-3 pt-3"><input className={myState.box_type === "fullname" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} onChange={(event) => dispatch(employeeUpdate({
+                                                                  }))} onBlur={() => updateUsername(id, username)} className={myState.box_type === "username" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} value={username} /></td>
+                                                                  <td className="col-sm-3 pt-3"><input type="text" className={myState.box_type === "fullname" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} onChange={(event) => dispatch(employeeUpdate({
                                                                         index: index,
                                                                         type: 'fullname',
                                                                         value: event.target.value
-                                                                  }))} value={fullname} onBlur={() => update(id, fullname)} /></td>
-                                                                  <td className="col-3 pt-3"><input className={myState.box_type === "company" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} onChange={(event) => dispatch(employeeUpdate({
+                                                                  }))} value={fullname} onBlur={() => updateFullname(id, fullname)} /></td>
+                                                                  <td className="col-sm-3 pt-3"><input type="text" className={myState.box_type === "company" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} onChange={(event) => dispatch(employeeUpdate({
                                                                         index: index,
                                                                         type: 'company',
                                                                         value: event.target.value
-                                                                  }))} value={company} onBlur={() => update2(id, company)} /></td>
+                                                                  }))} value={company} onBlur={() => updateCompany(id, company)} /></td>
 
-                                                                  <td className="col-3"><button type="button" onClick={() => modalShow(id)} className="btn btn-danger">Remove</button></td>
+                                                                  <td className="col-sm-2"><button type="button" onClick={() => modalShow(id)} className="btn btn-danger mt-2">Remove</button></td>
                                                             </tr>
                                                             )
                                                       })

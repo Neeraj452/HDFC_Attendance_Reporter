@@ -80,11 +80,13 @@ function UploadRecord() {
                                     <table className="table  table-striped">
                                           <thead>
                                                 <tr className="">
-                                                      <th className="col-sm-2">#</th>
-                                                      <th className="col-sm-3">File Name</th>
-                                                      <th className="col-sm-3">Date</th>
-                                                      <th className="col-sm-3"></th>
+                                                      <th className="col-sm-1">#</th>
+                                                      <th className="col-sm-4">File Name</th>
+                                                      <th className="col-sm-4">Date</th>
+                                                      <th className="col-sm-1"></th>
+                                                      <th className="col-sm-1"></th>
                                                 </tr>
+
                                           </thead>
                                           <tbody>
                                                 {
@@ -92,12 +94,13 @@ function UploadRecord() {
                                                             const { id, filename, date } = Element
                                                             return (
                                                                   <tr>
-                                                                        <td className="col-sm-2 py-4">{index + 1}</td>
-                                                                        <td className="col-sm-3 py-4" >{filename}</td>
-                                                                        <td className=" col-sm-3 py-4">{date}</td>
-                                                                        <td className="pt-3"><button type="button" onClick={() => AccountNumbersUtils.Download(id)} className=" btn btn-primary mr-1">Download</button>
-                                                                              <button type="button" onClick={() => modalShow(id)} className=" btn btn-danger col-sm-4">Remove</button>
+                                                                        <td className="col-sm-1 py-4">{index + 1}</td>
+                                                                        <td className="col-sm-4 py-4" >{filename}</td>
+                                                                        <td className="col-sm-4 py-4">{date}</td>
+                                                                        <td className="col-sm-1 pt-3"><button type="button" onClick={() => AccountNumbersUtils.Download(id)} className=" btn btn-primary mr-1">Download</button>
                                                                         </td>
+                                                                        <td className="col-sm-1 pt-3"><button type="button" onClick={() => modalShow(id)} className=" btn btn-danger">Remove</button></td>
+
                                                                   </tr>
                                                             )
                                                       })
@@ -107,32 +110,34 @@ function UploadRecord() {
                               </div>
                         </div>
                   }
-                  {myState.show && <Modal show={myState.show}>
-                        <Modal.Header><h3>Remove Record</h3>
-                              <button className="close" onClick={() => dispatch(handelModal(false))} data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                              </button>
-                        </Modal.Header>
-                        <Modal.Body>Are you sure want to remove this record?</Modal.Body>
-                        <Modal.Footer>
-                              <Button onClick={() => AccountNumbersUtils.deleteFileInfo(id)} style={{ width: "80px" }}>Yes</Button>
-                        </Modal.Footer>
-                  </Modal>
+                  {
+                        myState.show && <Modal show={myState.show}>
+                              <Modal.Header><h3>Remove Record</h3>
+                                    <button className="close" onClick={() => dispatch(handelModal(false))} data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                    </button>
+                              </Modal.Header>
+                              <Modal.Body>Are you sure want to remove this record?</Modal.Body>
+                              <Modal.Footer>
+                                    <Button onClick={() => AccountNumbersUtils.deleteFileInfo(id)} style={{ width: "80px" }}>Yes</Button>
+                              </Modal.Footer>
+                        </Modal>
                   }
 
-                  {myState.fileerror && <Modal show={myState.fileerror}>
-                        <Modal.Header><h3>Error</h3>
-                              <button className="close" onClick={() => dispatch(handelFileError(false))} data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                              </button>
-                        </Modal.Header>
-                        <Modal.Body>Invalid file</Modal.Body>
-                        <Modal.Footer>
-                              <Button onClick={() => dispatch(handelFileError(false))} style={{ width: "80px" }}>Ok</Button>
-                        </Modal.Footer>
-                  </Modal>
+                  {
+                        myState.fileerror && <Modal show={myState.fileerror}>
+                              <Modal.Header><h3>Error</h3>
+                                    <button className="close" onClick={() => dispatch(handelFileError(false))} data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                    </button>
+                              </Modal.Header>
+                              <Modal.Body>Invalid file</Modal.Body>
+                              <Modal.Footer>
+                                    <Button onClick={() => dispatch(handelFileError(false))} style={{ width: "80px" }}>Ok</Button>
+                              </Modal.Footer>
+                        </Modal>
                   }
-            </div>
+            </div >
       )
 }
 export default UploadRecord;

@@ -1,5 +1,10 @@
-
-
+input[type="text"] {
+  border: 1px solid #c9c9c9;
+  width: 15em;
+  border-radius: 5px;
+  padding: 10px;
+  outline: none;
+}
 
 
 
