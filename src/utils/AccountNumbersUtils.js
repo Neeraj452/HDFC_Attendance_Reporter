@@ -66,18 +66,12 @@ export default class AccountNumbersUtils {
         store.dispatch(dataDelete(id))
         store.dispatch(handelModal(false));
     }
-    static updateFullname = (object) => {
-        db.employee.update(object.id, { "fullname": object.name })
+    static updateEmployeeDetails = (object, details) => {
+        console.log("details", details)
+        db.employee.update(object.id, { [details]: object.name })
         store.dispatch(boxColour(false));
     }
-    static updateUsername = (object) => {
-        db.employee.update(object.id, { "username": object.name })
-        store.dispatch(boxColour(false));
-    }
-    static updateCompany = (object) => {
-        db.employee.update(object.id, { "company": object.name })
-        store.dispatch(boxColour(false));
-    }
+
     static addFileInfo = (object) => {
         db.upload_file_info.add(object).then(async () => {
             let allPosts = await db.upload_file_info.toArray();

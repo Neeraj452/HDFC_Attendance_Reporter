@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Modal, Button } from 'react-bootstrap'
-import { useHistory } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { headerShow } from '../actions/AccountStatementAction'
 
 const UserInput = () => {
-  const history = useHistory();
   const dispatch = useDispatch()
   const [token, setToken] = useState("");
   const [key, setKey] = useState("");
   const [show, setShow] = useState(false);
+  const [authorized, setAuthorized] = useState(false)
   const handleSubmit = () => {
     if (token === "" || key === "") {
       setShow(true);
@@ -17,26 +17,24 @@ const UserInput = () => {
     else {
       localStorage.setItem("token", token);
       localStorage.setItem("key", key);
-      history.push('/Employee');
+      setAuthorized(true)
     }
   }
   const getUserToken = () => {
     const gettoken = localStorage.getItem("token");
     const getkey = localStorage.getItem("key");
     if (gettoken !== null && getkey !== null) {
-      history.push('/Employee');
-
+      setAuthorized(true)
     }
   }
-
-
   useEffect(() => {
     dispatch(headerShow(true))
     getUserToken()
   }, [])
   return (
-    <div>
 
+    <div>
+      {authorized ? <Redirect to='/Employee' /> : null}
       {show && <Modal show={show}>
         <Modal.Header><h3>Login</h3>
           <button className="close" onClick={() => setShow(false)} data-dismiss="modal" aria-label="Close">
@@ -81,11 +79,7 @@ const UserInput = () => {
 
         </div>
       </div>
-
-
     </div>
-
-
   );
 }
 export default UserInput;

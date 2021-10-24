@@ -44,7 +44,7 @@ export function accountStatementReducer(state = INITIAL_STATE, action) {
             state.box_type = type;
             state.box_color = true;
             let value = action.data.value;
-            let employee = state.EmployeeData[index];
+            let employee = state.EmployeeData[index]; 
             if (type === 'username') {
                 employee.username = value;
             }

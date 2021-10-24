@@ -7,8 +7,6 @@ import Employee from "./components/Employee";
 import UploadRecord from "./components/UploadRecord";
 import Report from "./components/Report";
 import HomeScreen from "./components/HomeScreen";
-
-
 const App = () => {
   return (
     <div>

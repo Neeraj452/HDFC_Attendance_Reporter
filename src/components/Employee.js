@@ -10,9 +10,6 @@ function Employee() {
       const [id, setId] = useState("");
       const dispatch = useDispatch()
       const myState = useSelector((store) => store.accountStatementReducer);
-      // console.log("myState.box_type", myState.box_type)
-      // console.log("myState.box_index", myState.box_index)
-      // console.log("myState.box_color", myState.box_color)
       useEffect(() => {
             AccountNumbersUtils.getEmployee()
             dispatch(headerShow(false))
@@ -49,7 +46,7 @@ function Employee() {
             }
             return 0;
       })
-      const updateFullname = (id, name) => {
+      const updateEmployeeDetails = (id, name, details) => {
             let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 
             if (format.test(name)) {
@@ -60,34 +57,10 @@ function Employee() {
                         id: id,
                         name: name
                   }
-                  AccountNumbersUtils.updateFullname(object)
+                  AccountNumbersUtils.updateEmployeeDetails(object, details)
             }
       }
-      const updateUsername = (id, name) => {
-            let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-            if (format.test(name)) {
-                  dispatch(handelsSpecialChareactor(true))
-            }
-            else {
-                  const object = {
-                        id: id,
-                        name: name
-                  }
-                  AccountNumbersUtils.updateUsername(object)
-            }
-      }
-      const updateCompany = (id, name) => {
-            let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-            if (format.test(name)) {
-                  dispatch(handelsSpecialChareactor(true))
-            } else {
-                  const object = {
-                        id: id,
-                        name: name
-                  }
-                  AccountNumbersUtils.updateCompany(object)
-            }
-      }
+
       const modalShow = (id) => {
             setId(id)
             dispatch(handelModal(true))
@@ -127,17 +100,17 @@ function Employee() {
                                                                         index: index,
                                                                         type: 'username',
                                                                         value: event.target.value
-                                                                  }))} onBlur={() => updateUsername(id, username)} className={myState.box_type === "username" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} value={username} /></td>
+                                                                  }))} onBlur={() => updateEmployeeDetails(id, username, "username")} className={myState.box_type === "username" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} value={username} /></td>
                                                                   <td className="col-sm-3 pt-3"><input type="text" className={myState.box_type === "fullname" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} onChange={(event) => dispatch(employeeUpdate({
                                                                         index: index,
                                                                         type: 'fullname',
                                                                         value: event.target.value
-                                                                  }))} value={fullname} onBlur={() => updateFullname(id, fullname)} /></td>
+                                                                  }))} value={fullname} onBlur={() => updateEmployeeDetails(id, fullname, "fullname")} /></td>
                                                                   <td className="col-sm-3 pt-3"><input type="text" className={myState.box_type === "company" && myState.box_index === index ? myState.box_color ? "border border-danger" : "border border-success" : null} onChange={(event) => dispatch(employeeUpdate({
                                                                         index: index,
                                                                         type: 'company',
                                                                         value: event.target.value
-                                                                  }))} value={company} onBlur={() => updateCompany(id, company)} /></td>
+                                                                  }))} value={company} onBlur={() => updateEmployeeDetails(id, company, "company")} /></td>
 
                                                                   <td className="col-sm-2"><button type="button" onClick={() => modalShow(id)} className="btn btn-danger mt-2">Remove</button></td>
                                                             </tr>

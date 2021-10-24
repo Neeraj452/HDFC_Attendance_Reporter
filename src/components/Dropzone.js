@@ -1,12 +1,9 @@
 
 import React from "react";
 import { useDropzone } from "react-dropzone";
-
 const Dropzone = ({ onDrop }) => {
-
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-
   });
   return (
     <section>
@@ -18,6 +15,5 @@ const Dropzone = ({ onDrop }) => {
       </div>
     </section>
   );
-};
-
+}; 
 export default Dropzone;
