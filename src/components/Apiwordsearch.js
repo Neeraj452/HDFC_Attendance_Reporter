@@ -15,7 +15,7 @@ class Apiwordsearch extends Component {
       }
       async getData() {
             const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en_US/${this.state.word}`)
-            { response && await this.addApiData(response) }
+            { response && this.addApiData(response) }
       }
       addApiData = async (response) => {
             this.getApi_Data()
@@ -121,7 +121,7 @@ class Apiwordsearch extends Component {
                                           <span aria-hidden="true">&times;</span>
                                     </button>
                               </Modal.Header>
-                              <Modal.Body>Invalid file</Modal.Body>
+                              <Modal.Body>Word already present</Modal.Body>
                               <Modal.Footer>
                                     <Button onClick={() => this.setState({ flag: false })} style={{ width: "80px" }}>Ok</Button>
                               </Modal.Footer>

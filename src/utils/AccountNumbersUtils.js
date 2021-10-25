@@ -134,12 +134,6 @@ export default class AccountNumbersUtils {
 
     static addApiData = async (object) => {
         await db.apisearch.add(object)
-        AccountNumbersUtils.getaddApiData()
-        //.then(async () => {
-        // let allPosts = await db.apisearch.toArray();
-        // console.log("allPosts1", allPosts)
-        // return allPosts;
-        //   });
     }
 
     static getaddApiData = async () => {
