@@ -100,7 +100,7 @@ class Apiwordsearch extends Component {
                                                             this.props.accountStatement.apiworddata && (this.props.accountStatement.apiworddata).map((Element, index) => {
                                                                   const { word, definition, example } = Element
                                                                   return (
-                                                                        <tr className={this.state.flag ? (word === this.state.word) ? "bg-danger" : null : null} >
+                                                                        <tr className={this.state.flag ? (word === this.state.word) ? "bg-info" : null : null} >
                                                                               <td className="col-sm-1 py-4">{index + 1}</td>
                                                                               <td className="col-sm-2 py-4" >{word}</td>
                                                                               <td className="col-sm-5 py-4">{definition}</td>
