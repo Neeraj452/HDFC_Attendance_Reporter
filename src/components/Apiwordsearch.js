@@ -18,9 +18,9 @@ class Apiwordsearch extends Component {
             { response && this.addApiData(response) }
       }
       addApiData = async (response) => {
-            this.getApi_Data()
+            let data = await AccountNumbersUtils.getaddApiData()
             let object = {
-                  id: this.props.accountStatement.apiworddata.length > 0 ? this.props.accountStatement.apiworddata[this.props.accountStatement.apiworddata.length - 1].id + 1 : 1,
+                  id: data.length > 0 ? data[data.length - 1].id + 1 : 1,
                   word: this.state.word,
                   definition: response.data[0].meanings[0].definitions[0].definition,
                   example: response.data[0].meanings[0].definitions[0].example
@@ -69,9 +69,10 @@ class Apiwordsearch extends Component {
             })
       }
       render() {
+            this.sortword()
             return (
                   <div className="container">
-                        {this.sortword()}
+
 
                         <div className='text-center'>
                               <input type="text" value={this.state.word} onChange={(event) => this.setState({
