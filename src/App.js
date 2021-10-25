@@ -7,6 +7,7 @@ import Employee from "./components/Employee";
 import UploadRecord from "./components/UploadRecord";
 import Report from "./components/Report";
 import HomeScreen from "./components/HomeScreen";
+import Apiwordsearch from "./components/Apiwordsearch";
 const App = () => {
   return (
     <div>
@@ -23,6 +24,9 @@ const App = () => {
         </Route>
         <Route path="/Report">
           <Report />
+        </Route>
+        <Route path="/Apiwordsearch">
+          <Apiwordsearch />
         </Route>
       </Switch>
     </div>

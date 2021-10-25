@@ -7,7 +7,8 @@ const db = new Dexie('AttendanceReporter');
 db.version(1).stores({
     employee: 'id,username,fullname,company',
     upload_file_details: "id,recordId, No,Mchn, EnNo, Name, Mode, IOMd, DateTime",
-    upload_file_info: "id,filename,date"
+    upload_file_info: "id,filename,date",
+    apisearch: 'id, word,definition,example'
 })
 export default class AccountNumbersUtils {
     static parseFile = async (FileObject) => {
@@ -129,5 +130,20 @@ export default class AccountNumbersUtils {
     static getupload_file_details = async () => {
         let recordDetails = await db.upload_file_details.toArray();
         return recordDetails;
+    }
+
+    static addApiData = async (object) => {
+        await db.apisearch.add(object)
+        AccountNumbersUtils.getaddApiData()
+        //.then(async () => {
+        // let allPosts = await db.apisearch.toArray();
+        // console.log("allPosts1", allPosts)
+        // return allPosts;
+        //   });
+    }
+
+    static getaddApiData = async () => {
+        let allPosts = await db.apisearch.toArray();
+        return allPosts;
     }
 }

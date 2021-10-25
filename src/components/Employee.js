@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { employeeUpdate, headerShow, handelModal, handelsSpecialChareactor, boxColour } from '../actions/AccountStatementAction'
+import { employeeUpdate, headerShow, handelModal, handelsSpecialChareactor } from '../actions/AccountStatementAction'
 import AccountNumbersUtils from "../utils/AccountNumbersUtils";
 function Employee() {
       const [username, setUsername] = useState("");

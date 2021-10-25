@@ -61,6 +61,11 @@ export const boxColour = (res) => ({
     data: res
 });
 
+export const addApiData = (res) => ({
+    type: Config.ADDAPIDATA,
+    data: res
+});
+
 
 
 

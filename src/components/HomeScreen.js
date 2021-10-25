@@ -76,6 +76,8 @@ class HomeScreen extends React.Component {
                                                 <li> <NavLink className="
                                             dropdown-item" to="/UploadRecord">Upload Record</NavLink></li>
                                                 <li> <NavLink className="
+                                            dropdown-item" to="/Apiwordsearch">Apiwordsearch</NavLink></li>
+                                                <li> <NavLink className="
                                             dropdown-item" to="/Report">Report</NavLink></li>
                                             </ul>
                                             {/* <div className="dropdown-menu">

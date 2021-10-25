@@ -76,7 +76,6 @@ const UserInput = () => {
               </button>
             </div>
           </form>
-
         </div>
       </div>
     </div>

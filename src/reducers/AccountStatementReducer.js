@@ -19,7 +19,8 @@ const INITIAL_STATE = {
     showSpecial: false,
     box_type: "",
     box_color: true,
-    box_index: ""
+    box_index: "",
+    apiworddata: []
 }
 
 
@@ -44,7 +45,7 @@ export function accountStatementReducer(state = INITIAL_STATE, action) {
             state.box_type = type;
             state.box_color = true;
             let value = action.data.value;
-            let employee = state.EmployeeData[index]; 
+            let employee = state.EmployeeData[index];
             if (type === 'username') {
                 employee.username = value;
             }
@@ -89,10 +90,12 @@ export function accountStatementReducer(state = INITIAL_STATE, action) {
         case Config.BOXCOLOUR:
             state.box_color = action.data;
             return { ...state }
-
-
-
-
+        case Config.BOXCOLOUR:
+            state.box_color = action.data;
+            return { ...state }
+        case Config.ADDAPIDATA:
+            state.apiworddata = action.data;
+            return { ...state }
 
 
 
